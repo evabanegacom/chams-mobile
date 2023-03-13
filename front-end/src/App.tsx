@@ -1,15 +1,33 @@
 import { useEffect, useState } from "react"
 import { RootState } from './redux/store'
 import { useDispatch, useSelector } from "react-redux"
-import { addTodos, getTodos, removeTodo } from "./redux/actions"
+import { addTodos, getTodos, removeTodo, updateTodos } from "./redux/actions"
+import { Button } from "@mui/material"
 
-
-const TodosTable= () => {
+const App = () => {
   const dispatch = useDispatch()
   const loading = useSelector((state: RootState) => state?.todos?.loading)
   const todos = useSelector((state: RootState) => state?.todos?.data)
-  console.log({todos})
 
+// const todos = [
+//     {
+//       id: 1,
+//       name: 'test1',
+//       description: 'test1'
+//     },
+//     {
+//       id: 2,
+//       name: 'test2',
+//       description: 'test2'
+//     },
+
+// ]
+
+  const error = useSelector((state: RootState) => state?.todos?.error)
+
+  const [todoId, setTodoId] = useState(0)
+  const [editing, setEditing] = useState(false)
+  
   useEffect(() => {
     dispatch(getTodos() as any)
   }, [dispatch])
@@ -18,7 +36,50 @@ const TodosTable= () => {
     dispatch(removeTodo(id) as any)
   }
 
+  const [values, setValues] = useState({
+    name: '',
+    description: '',
+  })
+
+  const handleEdit = (todo: any) => {
+    setTodoId(todo.id)
+    setValues({ name: todo.name, description: todo.description })
+    setEditing(true)
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target
+    setValues({ ...values, [name]: value })
+  }
+  
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (editing) {
+      dispatch(updateTodos(todoId, values) as any)
+      setTodoId(0)
+      setEditing(false)
+    } else {
+      dispatch(addTodos(values) as any)
+      setValues({ name: '', description: '' })
+    }
+  }
+
   return (
+    <>
+    <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input onChange={handleChange} placeholder='name' type="text" name="name" value={values.name} required />
+        </div>
+        <div>
+          <label htmlFor="description">Description:</label>
+          <textarea onChange={handleChange} placeholder='description' name="description" value={values.description} required />
+        </div>
+        <div>
+          <button type="submit">{editing ? 'Update' : 'Add'}</button>
+        </div>
+      </form>
     <table>
       <thead>
         <tr>
@@ -35,7 +96,7 @@ const TodosTable= () => {
             <td>{yourEntity.name}</td>
             <td>{yourEntity.description}</td>
             <td>
-              <button>Edit</button>
+            <button onClick={() => handleEdit(yourEntity)}>Edit</button>
               <button onClick={() => handleDelete(yourEntity.id)}>
                 Delete
               </button>
@@ -49,58 +110,7 @@ const TodosTable= () => {
         )}
       </tbody>
     </table>
-  )
-}
-
-const YourEntityForm = () => {
-  const dispatch = useDispatch()
-  const [ values, setValues ] = useState({
-    name: '',
-    description: ''
-  })
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target
-    setValues({ ...values, [name]: value })
-  }
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    console.log(values)
-    // dispatch(addTodos(values) as any)
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input onChange={handleChange} placeholder='name' type="text" name="name" required />
-      </div>
-      <div>
-        <label htmlFor="description">Description:</label>
-        <textarea onChange={handleChange} placeholder='description' name="description" required />
-      </div>
-      <div>
-        <button type="submit">Add</button>
-      </div>
-    </form>
-  )
-}
-
-const App = () => {
-  const dispatch = useDispatch()
-
-  const handleRefresh = () => {
-    dispatch(getTodos() as any)
-  }
-
-  return (
-    <div>
-      <h1>Your Entity</h1>
-      <TodosTable />
-      <YourEntityForm />
-      <button onClick={handleRefresh}>Refresh</button>
-    </div>
+    </>
   )
 }
 
