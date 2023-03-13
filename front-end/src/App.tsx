@@ -108,6 +108,11 @@ const App = () => {
             <td colSpan={4}>Loading...</td>
           </tr>
         )}
+        { error && (
+          <tr>
+            <td colSpan={4}>{error}</td>
+          </tr>
+        )}
       </tbody>
     </table>
     </>

@@ -1,11 +1,11 @@
 import axios from "axios"
 import { AppDispatch } from "./store"
 import * as types from "./types"
-const apiUrl = "http://localhost:3001/your-entity"
+const apiUrl = "http://localhost:3001"
 
 const fetchTodos = async () => {
   return await axios
-    .post(apiUrl, {})
+    .get(`${apiUrl}/todo`, {})
     .then((res) => {
       return res
     })
@@ -24,10 +24,9 @@ export const getTodos = () => async (dispatch) => {
   }
 }
 
-const createTodo = async (todoInfo: any) => {
-  console.log(todoInfo)
+const createTodo = async (todoInfo) => {
   return await axios
-    .post(apiUrl, todoInfo, {})
+    .post(`${apiUrl}/todo`, todoInfo, {})
     .then((res) => {
       return res
     })
@@ -49,7 +48,7 @@ export const addTodos = (todoInfo: any) => async (dispatch) => {
 const editTodo = async (id: any, todoInfo: any) => {
   console.log(todoInfo)
   return await axios
-    .put(`${apiUrl}/${id}`, todoInfo, {})
+    .put(`${apiUrl}/todo/${id}`, todoInfo, {})
     .then((res) => {
       return res
     })
@@ -70,7 +69,7 @@ export const updateTodos = (todoInfo: any, id: any) => async (dispatch) => {
 
 const deleteTodo = async (id: any) => {
   return await axios
-    .delete(`${apiUrl}/${id}`, {})
+    .delete(`${apiUrl}/todo/${id}`, {})
     .then((res) => {
       return res
     })
