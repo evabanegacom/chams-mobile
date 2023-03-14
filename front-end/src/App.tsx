@@ -3,6 +3,7 @@ import { RootState } from './redux/store'
 import { useDispatch, useSelector } from "react-redux"
 import { addTodos, getTodos, removeTodo, updateTodos } from "./redux/actions"
 import { Button } from "@mui/material"
+import './App.css';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -66,13 +67,14 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className='container'>
     <form onSubmit={handleSubmit}>
-        <div>
+        <h2>Create your todos</h2>
+        <div className='name-div'>
           <label htmlFor="name">Name:</label>
           <input onChange={handleChange} placeholder='name' type="text" name="name" value={values.name} required />
         </div>
-        <div>
+        <div className='name-div'>
           <label htmlFor="description">Description:</label>
           <textarea onChange={handleChange} placeholder='description' name="description" value={values.description} required />
         </div>
@@ -80,13 +82,13 @@ const App = () => {
           <button type="submit">{editing ? 'Update' : 'Add'}</button>
         </div>
       </form>
+      <h2>Todos</h2>
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -115,7 +117,7 @@ const App = () => {
         )}
       </tbody>
     </table>
-    </>
+    </div>
   )
 }
 
