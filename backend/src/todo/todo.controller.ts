@@ -45,7 +45,8 @@ async update(@Param('id') id: any, @Body() todo: TodoEntity): Promise<TodoEntity
   }
   const updatedTodo = Object.assign(existingTodo, todo);
   await this.todoRepository.save(updatedTodo);
-  return updatedTodo;
+  const todos:any = await this.todoRepository.find(); // retrieve all todos from the database
+  return todos;
 }
 
 

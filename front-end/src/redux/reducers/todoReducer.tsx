@@ -20,6 +20,7 @@ const todoReducer = (state = initialState,action: any) => {
 
       case types.GET_TODOS_SUCCESS:
       case types.DELETE_TODOS_SUCCESS:
+      case types.EDIT_TODOS_SUCCESS:
         return { ...state, data: payload, loading: false, error: null }
 
     case types.GET_TODOS_FAILURE:
