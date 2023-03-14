@@ -44,7 +44,7 @@ const createTodo = async (todoInfo) => {
     })
 }
 
-export const addTodos = (todoInfo: any) => async (dispatch) => {
+export const addTodos = (todoInfo) => async (dispatch) => {
   try {
     await dispatch({ type: types.CREATE_TODOS_BEGIN })
     const create: any = await createTodo(todoInfo)
@@ -67,10 +67,10 @@ const editTodo = async (id, todoInfo) => {
     })
 }
 
-export const updateTodos = (todoInfo, id) => async (dispatch) => {
+export const updateTodos = (id, todoInfo) => async (dispatch) => {
   try {
     await dispatch({ type: types.EDIT_TODOS_BEGIN })
-    const update: any = await editTodo(todoInfo, id)
+    const update: any = await editTodo(id, todoInfo)
     dispatch({ type: types.EDIT_TODOS_SUCCESS, payload: update.data })
   } catch (error: any) {
     dispatch({ type: types.EDIT_TODOS_FAILURE, message: error.message })

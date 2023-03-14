@@ -25,7 +25,7 @@ export class TodoService {
     return await this.todoRepository.findOne(id);
   }
 
-  async update(id: number, name: string, description: string): Promise<void> {
+  async update(id: any, name: string, description: string): Promise<void> {
     await this.todoRepository.update(id, { name, description });
   }
 

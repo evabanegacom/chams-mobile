@@ -27,7 +27,7 @@ const App = () => {
     description: '',
   })
 
-  const handleEdit = (todo: any) => {
+  const handleEdit = (todo) => {
     setTodoId(todo.id)
     setValues({ name: todo.name, description: todo.description })
     setEditing(true)
@@ -37,12 +37,11 @@ const App = () => {
     const { name, value } = event.target
     setValues({ ...values, [name]: value })
   }
-  
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (editing) {
-      dispatch(updateTodos(todoId, values) as any)
+      dispatch(updateTodos(Number(todoId), values) as any)
       setTodoId(0)
       setEditing(false)
     } else {
