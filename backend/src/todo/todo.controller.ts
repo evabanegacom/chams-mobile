@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -34,16 +35,25 @@ export class TodoController {
   }
 
   @Put(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() todo: TodoEntity,
-  ): Promise<TodoEntity> {
-    todo.id = id;
-    return await this.todoRepository.save(todo);
+async update(
+  @Param('id') id: any,
+  @Body() todo: TodoEntity,
+): Promise<TodoEntity> {
+  const existingTodo = await this.todoRepository.findOne(id);
+  if (!existingTodo) {
+    throw new NotFoundException(`Todo with id ${id} not found`);
   }
+  const updatedTodo = Object.assign(existingTodo, todo);
+  await this.todoRepository.save(updatedTodo);
+  const todos:any = await this.todoRepository.find(); // retrieve all todos from the database
+  return todos;
+}
+
 
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     await this.todoRepository.delete(id);
+    const todos:any = await this.todoRepository.find(); // retrieve all todos from the database
+    return todos;
   }
 }

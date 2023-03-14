@@ -2,27 +2,12 @@ import { useEffect, useState } from "react"
 import { RootState } from './redux/store'
 import { useDispatch, useSelector } from "react-redux"
 import { addTodos, getTodos, removeTodo, updateTodos } from "./redux/actions"
-import { Button } from "@mui/material"
 import './App.css';
 
 const App = () => {
   const dispatch = useDispatch()
   const loading = useSelector((state: RootState) => state?.todos?.loading)
   const todos = useSelector((state: RootState) => state?.todos?.data)
-
-// const todos = [
-//     {
-//       id: 1,
-//       name: 'test1',
-//       description: 'test1'
-//     },
-//     {
-//       id: 2,
-//       name: 'test2',
-//       description: 'test2'
-//     },
-
-// ]
 
   const error = useSelector((state: RootState) => state?.todos?.error)
 

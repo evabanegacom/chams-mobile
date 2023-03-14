@@ -1,11 +1,18 @@
 import axios from "axios"
 import { AppDispatch } from "./store"
 import * as types from "./types"
-const apiUrl = "http://localhost:3001"
+
+const apiUrl = "http://localhost:4000"
+
+const headers = {
+  "Content-Type": "application/json",
+}
 
 const fetchTodos = async () => {
   return await axios
-    .get(`${apiUrl}/todo`, {})
+    .get(`${apiUrl}/todo`, {
+      headers: headers,
+    })
     .then((res) => {
       return res
     })
@@ -26,7 +33,9 @@ export const getTodos = () => async (dispatch) => {
 
 const createTodo = async (todoInfo) => {
   return await axios
-    .post(`${apiUrl}/todo`, todoInfo, {})
+    .post(`${apiUrl}/todo`, todoInfo, {
+      headers: headers,
+    })
     .then((res) => {
       return res
     })
@@ -45,10 +54,11 @@ export const addTodos = (todoInfo: any) => async (dispatch) => {
   }
 }
 
-const editTodo = async (id: any, todoInfo: any) => {
-  console.log(todoInfo)
+const editTodo = async (id, todoInfo) => {
   return await axios
-    .put(`${apiUrl}/todo/${id}`, todoInfo, {})
+    .put(`${apiUrl}/todo/${id}`, todoInfo, {
+      headers: headers,
+    })
     .then((res) => {
       return res
     })
@@ -57,7 +67,7 @@ const editTodo = async (id: any, todoInfo: any) => {
     })
 }
 
-export const updateTodos = (todoInfo: any, id: any) => async (dispatch) => {
+export const updateTodos = (todoInfo, id) => async (dispatch) => {
   try {
     await dispatch({ type: types.EDIT_TODOS_BEGIN })
     const update: any = await editTodo(todoInfo, id)
@@ -69,7 +79,9 @@ export const updateTodos = (todoInfo: any, id: any) => async (dispatch) => {
 
 const deleteTodo = async (id: any) => {
   return await axios
-    .delete(`${apiUrl}/todo/${id}`, {})
+    .delete(`${apiUrl}/todo/${id}`, {
+      headers: headers,
+    })
     .then((res) => {
       return res
     })
@@ -82,6 +94,7 @@ export const removeTodo = (id: any) => async (dispatch) => {
   try {
     await dispatch({ type: types.DELETE_TODOS_BEGIN })
     const todo: any = await deleteTodo(id)
+    console.log({todo})
     dispatch({ type: types.DELETE_TODOS_SUCCESS, payload: todo.data })
   } catch (error: any) {
     dispatch({ type: types.DELETE_TODOS_FAILURE, message: error.message })
